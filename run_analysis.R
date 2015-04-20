@@ -1,4 +1,6 @@
-runProject <- function(directory = ""){
+# Function to read the different files in the UCI HAR Dataset and merge them
+# together into a single tidy dataset
+getTidyDataset <- function(directory = ""){
         
         ## 1. Check if dplyr is installed and then load
         if(!"dplyr" %in% rownames(installed.packages()))
@@ -27,7 +29,8 @@ runProject <- function(directory = ""){
                    !file.exists(pathTrain) | 
                    !file.exists(pathTrainActivity) |
                    !file.exists(pathTrainSubjects))
-                stop("One or more files could not be found. Check directory")
+                stop(paste ("One or more files could not be found in", 
+                            directory, "Please, check directory"))
         
         
         ## 3. Read the required data
@@ -55,7 +58,7 @@ runProject <- function(directory = ""){
         trainsetActivity <- read.table(pathTrainActivity, na.strings = "", 
                                        header = FALSE, stringsAsFactors = FALSE)
         ### 3.8 Subjects for each row of the train dataset
-        trainsetSubjects <- read.table(pathTrainActivity, na.strings = "", 
+        trainsetSubjects <- read.table(pathTrainSubjects, na.strings = "", 
                                        header = FALSE, stringsAsFactors = FALSE)
         
         ## 4. Convert datasets into tbl_df for manipulation with dplyr
@@ -75,8 +78,9 @@ runProject <- function(directory = ""){
         testset <- bind_cols(testsetSubjects, testsetActivity, testset)
         trainset <- bind_cols(trainsetSubjects, trainsetActivity, trainset)
         
-        ## 7. Give the testset descriptive headers
+        ## 7. Give the datasets descriptive headers
         colnames(testset) <- headers.unique
+        colnames(trainset) <- headers.unique
         
         ## 8. Format the dataset
         dataset <- 
@@ -94,4 +98,44 @@ runProject <- function(directory = ""){
                 
                 ### 8.4 Remove the old activity codes
                 select(-activitycode)
+        
+        ## 9. Kind message to the user
+        message("Dataset successfully tidied")
+        
+        ## 10. Return Dataset
+        dataset
 }
+
+# Function to create the summary of the UCI HAR Dataset with the mean of each
+# measurement per subject per activity
+createSummary <- function(dataset, filename = "summary.txt"){
+        
+        ## 1. Group the dataset by subject and activity
+        group_by(dataset, Subject, Activity) %>%
+                
+                ## 2. Generate mean for each column per Subject/Activity group
+                summarise_each(funs(mean)) %>%
+                
+                ## 3. write this summary to a file in the working directory
+                write.table(filename, row.name = FALSE)
+        
+        ## 4. Kind message to the user
+        message(paste("Summary saved in", filename))
+}
+
+# Little helper function to read the summary data back into R
+readSummary <- function(filename){
+        ## 1. Read the summary file from specified filename
+        read.table(filename, header = TRUE)
+}
+
+# Function to run the entire project with (my) default settings and file
+# locations
+runProject <- function(datafolder = "../UCI HAR Dataset/", 
+                       summaryfile = "summary.txt"){
+        dataset <- getTidyDataset(normalizePath(datafolder)) %>%
+        createSummary
+}
+
+# Single call to run the Getting and Cleaning Data Project
+runProject()
