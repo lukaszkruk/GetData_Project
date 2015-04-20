@@ -1,6 +1,6 @@
 # Function to read the different files in the UCI HAR Dataset and merge them
 # together into a single tidy dataset
-getTidyDataset <- function(directory = ""){
+getTidyDataset <- function(directory = "UCI HAR Dataset"){
         
         ## 1. Check if dplyr is installed and then load
         if(!"dplyr" %in% rownames(installed.packages()))
@@ -70,13 +70,13 @@ getTidyDataset <- function(directory = ""){
         trainsetSubjects <- tbl_df(trainsetSubjects)
                 
         
-        ## 5. Prepare headers and activityNames 
-        headers.unique <- c("Subject","activitycode", make.unique(headers[,2]))
-        colnames(activityNames) <- c("activitycode", "Activity")
-        
-        ## 6. Add subjects and activity to each row of the two datasets
+        ## 5. Add subjects and activity to each row of the two datasets
         testset <- bind_cols(testsetSubjects, testsetActivity, testset)
         trainset <- bind_cols(trainsetSubjects, trainsetActivity, trainset)
+        
+        ## 6. Prepare headers and activityNames 
+        headers.unique <- c("Subject","activitycode", make.unique(headers[,2]))
+        colnames(activityNames) <- c("activitycode", "Activity")
         
         ## 7. Give the datasets descriptive headers
         colnames(testset) <- headers.unique
@@ -131,11 +131,11 @@ readSummary <- function(filename){
 
 # Function to run the entire project with (my) default settings and file
 # locations
-runProject <- function(datafolder = "../UCI HAR Dataset/", 
+runProject <- function(datafolder = "UCI HAR Dataset/", 
                        summaryfile = "summary.txt"){
         dataset <- getTidyDataset(normalizePath(datafolder)) %>%
         createSummary
 }
 
 # Single call to run the Getting and Cleaning Data Project
-runProject()
+#runProject()
