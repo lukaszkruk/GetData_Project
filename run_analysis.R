@@ -55,49 +55,41 @@ getTidyDataset <- function(directory = "UCI HAR Dataset"){
         ### 3.8 Subjects for each row of the train dataset
         trainsetSubjects <- read.table(pathTrainSubjects, na.strings = "", 
                                        header = FALSE, stringsAsFactors = FALSE)
-        
-        ## 4. Convert datasets into tbl_df for manipulation with dplyr
-        testset <- tbl_df(testset)
-        testsetActivity <- tbl_df(testsetActivity)
-        testsetSubjects <- tbl_df(testsetSubjects)
-        trainset <- tbl_df(trainset)
-        trainsetActivity <- tbl_df(trainsetActivity)
-        trainsetSubjects <- tbl_df(trainsetSubjects)
                 
         
-        ## 5. Add subjects and activity to each row of the two datasets
+        ## 4. Add subjects and activity to each row of the two datasets
         testset <- bind_cols(testsetSubjects, testsetActivity, testset)
         trainset <- bind_cols(trainsetSubjects, trainsetActivity, trainset)
         
-        ## 6. Prepare headers and activityNames 
+        ## 5. Prepare headers and activityNames 
         headers.unique <- c("Subject","activitycode", make.unique(headers[,2]))
         colnames(activityNames) <- c("activitycode", "Activity")
         
-        ## 7. Give the datasets descriptive headers
+        ## 6. Give the datasets descriptive headers
         colnames(testset) <- headers.unique
         colnames(trainset) <- headers.unique
         
-        ## 8. Format the dataset
+        ## 7. Format the dataset
         dataset <- 
-                ### 8.1 Merge the datasets
+                ### 7.1 Merge the datasets
                 bind_rows(testset,trainset) %>%
                 
-                ### 8.2 Select appropriate columns
+                ### 7.2 Select appropriate columns
                 select(contains("Subject"),
                        contains("activitycode"), 
                        contains("mean"), 
                        contains("std")) %>%
                 
-                ### 8.3 Give activities descriptive names
+                ### 7.3 Give activities descriptive names
                 left_join(activityNames, by = "activitycode") %>%
                 
-                ### 8.4 Remove the old activity codes
+                ### 7.4 Remove the old activity codes
                 select(-activitycode)
         
-        ## 9. Kind message to the user
+        ## 8. Kind message to the user
         message("Dataset successfully tidied")
         
-        ## 10. Return Dataset
+        ## 9. Return Dataset
         dataset
 }
 

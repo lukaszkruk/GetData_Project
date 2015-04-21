@@ -35,14 +35,14 @@ Here the functions in run_analysis.R are described that make up the project
 This is the main workhorse for this project. The function accepts a directory
 where the dataset is stored creates a tidy dataset. In overview (with numbers
 matching the steps marked in the R code):   
-1. - 4. A check is performed to verify all above listed files are present and if so, they are all 
+1. - 3. A check is performed to verify all above listed files are present and if so, they are all 
 read into memory.  
-5. The activity codes and subjects - which are stored in separate files, are merged into their respective datasets.  
-6. - 7. the columns are given descriptive names based on features.txt.   
-8.1 The test and train dataset are merged. This completes **objective 1 and 4**.  
-8.2 From this dataset, only the columns that have 'mean' or 'std' in their name are selected, finising **objective 2**.   
-8.3 - 8.4 The activity codes are translated into descriptive activity names.   
-9. - 10. This finalizes **objective 3** and results in a tidy dataset which is returned.  
+4. The activity codes and subjects - which are stored in separate files, are merged into their respective datasets.  
+5. - 6. the columns are given descriptive names based on features.txt.   
+7.1 The test and train dataset are merged. This completes **objective 1 and 4**.  
+7.2 From this dataset, only the columns that have 'mean' or 'std' in their name are selected, finising **objective 2**.   
+7.3 - 7.4 The activity codes are translated into descriptive activity names.   
+8. - 9. This finalizes **objective 3** and results in a tidy dataset which is returned.  
 
 ### Function 2: createSummary
 This function takes the dataset from getTidyData as input, together with a filename and creates a summary.
