@@ -21,16 +21,11 @@ getTidyDataset <- function(directory = "UCI HAR Dataset"){
         pathTrainSubjects <- paste(directory, "train/subject_train.txt", sep = "")
         
         ### 2.2 Check if all required files can be found, error if not
-        if(!file.exists(pathHeaders) | 
-                   !file.exists(pathActivityNames)|
-                   !file.exists(pathTest) | 
-                   !file.exists(pathTestActivity) | 
-                   !file.exists(pathTestSubjects) |
-                   !file.exists(pathTrain) | 
-                   !file.exists(pathTrainActivity) |
-                   !file.exists(pathTrainSubjects))
-                stop(paste ("One or more files could not be found in", 
-                            directory, "Please, check directory"))
+        if(!all(file.exists(c(pathHeaders, pathActivityNames, pathTest, 
+                              pathTestActivity, pathTestSubjects, pathTrain, 
+                              pathTrainActivity, pathTrainSubjects))))
+                stop(paste ("One or more files could not be found in ", 
+                            directory, ", please check directory", sep = ""))
         
         
         ## 3. Read the required data
