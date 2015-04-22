@@ -73,6 +73,8 @@ getTidyDataset <- function(directory = "UCI HAR Dataset"){
                 select(contains("Subject"),
                        contains("activitycode"), 
                        contains("mean"), 
+                       -contains("Freq"),  #exclude the meanFreq-columns
+                       -contains("angle"),  #exclude angle([...]Mean) columns
                        contains("std")) %>%
                 
                 ### 6.3 Give activities descriptive names
@@ -124,4 +126,4 @@ runProject <- function(datafolder = "UCI HAR Dataset/",
 }
 
 # Single call to run the Getting and Cleaning Data Project
-#runProject()
+runProject()
